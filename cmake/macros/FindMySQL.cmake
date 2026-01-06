@@ -201,10 +201,13 @@ find_path(MYSQL_INCLUDE_DIR
     ${MYSQL_ADD_INCLUDE_PATH}
     /usr/include
     /usr/include/mysql
+    /usr/include/mariadb
     /usr/local/include
     /usr/local/include/mysql
+    /usr/local/include/mariadb
     /usr/local/mysql/include
 	${_MYSQL_ROOT_PATHS}
+    /usr/local/mariadb/include
   PATH_SUFFIXES
     include
     include/mysql
@@ -216,14 +219,17 @@ if(UNIX)
   foreach(LIB ${MYSQL_ADD_LIBRARIES})
     find_library(MYSQL_LIBRARY
       NAMES
-        mysql libmysql ${LIB}
+        mysql libmysql mariadb libmariadb mariadbclient libmariadbclient mysqlclient libmysqlclient ${LIB}
       PATHS
         ${MYSQL_ADD_LIBRARIES_PATH}
         /usr/lib
         /usr/lib/mysql
+        /usr/lib/mariadb
         /usr/local/lib
         /usr/local/lib/mysql
+        /usr/local/lib/mariadb
         /usr/local/mysql/lib
+        /usr/local/mariadb/lib
       DOC "Specify the location of the mysql library here."
     )
   endforeach(LIB ${MYSQL_ADD_LIBRARY})
@@ -249,15 +255,18 @@ endif(WIN32)
 # to build MYSQL stuff.
 
 if(UNIX)
-  find_program(MYSQL_EXECUTABLE mysql
-  PATHS
-    ${MYSQL_CONFIG_PREFER_PATH}
-    /usr/local/mysql/bin/
-    /usr/local/bin/
-    /usr/bin/
-  DOC
-    "path to your mysql binary."
-  )
+    find_program(MYSQL_EXECUTABLE 
+    NAMES
+        mysql mariadb
+    PATHS
+        ${MYSQL_CONFIG_PREFER_PATH}
+        /usr/local/mysql/bin/
+        /usr/local/mariadb/bin/
+        /usr/local/bin/
+        /usr/bin/
+    DOC
+        "path to your mysql/mariadb binary."
+    )
 endif(UNIX)
 
 if(WIN32)
